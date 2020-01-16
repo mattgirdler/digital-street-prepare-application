@@ -1,11 +1,10 @@
 // Import dynamodb from aws-sdk
 const dynamodb = require('aws-sdk/clients/dynamodb');
 
-// Import all functions from get-all-items.js
-const lambda = require('../../../src/handlers/get-all-items.js');
+const lambda = require('../../../src/handlers/get-titles.js');
 
-// This includes all tests for getAllItemsHandler
-describe('Test getAllItemsHandler', () => {
+// This includes all tests for getTitlesHandler
+describe('Test getAllTitlesHandler', () => {
     let scanSpy;
 
     // One-time setup and teardown, see more in https://jestjs.io/docs/en/setup-teardown
@@ -20,25 +19,25 @@ describe('Test getAllItemsHandler', () => {
         scanSpy.mockRestore();
     });
 
-    // This test invokes getAllItemsHandler and compares the result
-    it('should return ids', async () => {
-        const items = [{ id: 'id1' }, { id: 'id2' }];
+    // This test invokes getTitlesHandler and compares the result
+    it('should return title numbers', async () => {
+        const titles = [{ title_number: 'ABC123456' }, { title_number: 'DEF123456' }];
 
         // Return the specified value whenever the spied scan function is called
         scanSpy.mockReturnValue({
-            promise: () => Promise.resolve({ Items: items }),
+            promise: () => Promise.resolve({ Items: titles }),
         });
 
         const event = {
             httpMethod: 'GET',
         };
 
-        // Invoke getAllItemsHandler
-        const result = await lambda.getAllItemsHandler(event);
+        // Invoke getTitlesHandler
+        const result = await lambda.getTitlesHandler(event);
 
         const expectedResult = {
             statusCode: 200,
-            body: JSON.stringify(items),
+            body: JSON.stringify(titles),
         };
 
         // Compare the result with the expected result

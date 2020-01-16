@@ -1,11 +1,10 @@
 // Import dynamodb from aws-sdk
 const dynamodb = require('aws-sdk/clients/dynamodb');
 
-// Import all functions from put-item.js
-const lambda = require('../../../src/handlers/put-item.js');
+const lambda = require('../../../src/handlers/put-title.js');
 
-// This includes all tests for putItemHandler
-describe('Test putItemHandler', () => {
+// This includes all tests for putTitleHandler
+describe('Test putTitleHandler', () => {
     let putSpy;
 
     // One-time setup and teardown, see more in https://jestjs.io/docs/en/setup-teardown
@@ -20,8 +19,8 @@ describe('Test putItemHandler', () => {
         putSpy.mockRestore();
     });
 
-    // This test invokes putItemHandler and compares the result
-    it('should add id to the table', async () => {
+    // This test invokes putTitleHandler and compares the result
+    it('should add title number to the table', async () => {
         // Return the specified value whenever the spied put function is called
         putSpy.mockReturnValue({
             promise: () => Promise.resolve('data'),
@@ -29,11 +28,11 @@ describe('Test putItemHandler', () => {
 
         const event = {
             httpMethod: 'POST',
-            body: '{"id":"id1","name":"name1"}',
+            body: '{"title_number": "AGL123456"}',
         };
 
-        // Invoke putItemHandler()
-        const result = await lambda.putItemHandler(event);
+        // Invoke putTitleHandler()
+        const result = await lambda.putTitleHandler(event);
         const expectedResult = {
             statusCode: 200,
             body: event.body,
