@@ -1,0 +1,96 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Allows conveyancers to prepare their applications to HM Land Registry
+Transform: AWS::Serverless-2016-10-31
+Globals:
+  Function:
+    PermissionsBoundary:
+      Fn::Sub: arn:aws:iam::209863845661:policy/prepare-application-eu-west-2-PermissionsBoundary
+Parameters:
+  AppId:
+    Type: String
+Resources:
+  getTitleByIdFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: getTitleByIdFunction
+      Handler: src/handlers/get-title.getTitleByIdHandler
+      Runtime: nodejs10.x
+      MemorySize: 128
+      Timeout: 60
+      Description: A simple example includes a HTTP get method to get one item from
+        a DynamoDB table.
+      Policies:
+      - DynamoDBCrudPolicy:
+          TableName: title
+      Environment:
+        Variables:
+          TITLE_TABLE: title
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /{title_number}
+            Method: GET
+  getTitlesFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: getTitlesFunction
+      Handler: src/handlers/get-titles.getTitlesHandler
+      Runtime: nodejs10.x
+      MemorySize: 128
+      Timeout: 60
+      Description: A simple example includes a HTTP get method to get all items from
+        a DynamoDB table.
+      Policies:
+      - DynamoDBCrudPolicy:
+          TableName: title
+      Environment:
+        Variables:
+          TITLE_TABLE: title
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /
+            Method: GET
+  putTitleFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: putTitleFunction
+      Handler: src/handlers/put-title.putTitleHandler
+      Runtime: nodejs10.x
+      MemorySize: 128
+      Timeout: 60
+      Description: A simple example includes a HTTP post method to add one item to
+        a DynamoDB table.
+      Policies:
+      - DynamoDBCrudPolicy:
+          TableName: title
+      Environment:
+        Variables:
+          TITLE_TABLE: title
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /
+            Method: POST
+  SampleTable:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      PrimaryKey:
+        Name: id
+        Type: String
+      ProvisionedThroughput:
+        ReadCapacityUnits: 2
+        WriteCapacityUnits: 2
+  TitleTable:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      PrimaryKey:
+        Name: title_number
+        Type: String
+      ProvisionedThroughput:
+        ReadCapacityUnits: 2
+        WriteCapacityUnits: 2
+      TableName: title

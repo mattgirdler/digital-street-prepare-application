@@ -1,6 +1,6 @@
 {
     "httpMethod": "GET",
     "pathParameters": {
-        "id": "id1"
+        "title_number": "AGL123456"
     }
 }

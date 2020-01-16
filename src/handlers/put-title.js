@@ -6,12 +6,12 @@ const dynamodb = require('aws-sdk/clients/dynamodb');
 const docClient = new dynamodb.DocumentClient();
 
 // Get the DynamoDB table name from environment variables
-const tableName = process.env.SAMPLE_TABLE;
+const tableName = process.env.TITLE_TABLE;
 
 /**
  * A simple example includes a HTTP post method to add one item to a DynamoDB table.
  */
-exports.putItemHandler = async (event) => {
+exports.putTitleHandler = async (event) => {
     const { body, httpMethod, path } = event;
     if (httpMethod !== 'POST') {
         throw new Error(`postMethod only accepts POST method, you tried: ${httpMethod} method.`);
@@ -21,13 +21,15 @@ exports.putItemHandler = async (event) => {
     console.log('received:', JSON.stringify(event));
 
     // Get id and name from the body of the request
-    const { id, name } = JSON.parse(body);
+    const { application_reference, application_timestamp, class_of_title, edition_date,
+            entries, estate_interest, status, tenure, title_number } = JSON.parse(body);
 
     // Creates a new item, or replaces an old item with a new item
     // https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#put-property
     const params = {
         TableName: tableName,
-        Item: { id, name },
+        Item: { application_reference, application_timestamp, class_of_title, edition_date,
+            entries, estate_interest, status, tenure, title_number },
     };
     await docClient.put(params).promise();
 
