@@ -31,7 +31,6 @@ Resources:
   # Each Lambda function is defined by properties:
   # https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
 
-  # This is a Lambda function config associated with the source code: get-all-items.js
   getTitleByIdFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -82,7 +81,6 @@ Resources:
             Path: /
             Method: GET
 
-  # This is a Lambda function config associated with the source code: put-item.js
   putTitleFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -106,19 +104,27 @@ Resources:
           Properties:
             Path: /
             Method: POST
+
+  calculateAssurancesFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./
+      Handler: src/handlers/calculate-assurances.calculateAssurancesHandler
+      Runtime: nodejs10.x
+      MemorySize: 128
+      Timeout: 60
+      Description: Calculate and return the assurances required for a title.
+    Events:
+      Api:
+        Type: Api
+        Properties:
+          Path: /assurances
+          Method: GET
+
+
   # Simple syntax to create a DynamoDB table with a single attribute primary key, more in
   # https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlesssimpletable
 
-  # DynamoDB table to store item: {id: &lt;ID&gt;, name: &lt;NAME&gt;}
-  SampleTable:
-    Type: AWS::Serverless::SimpleTable
-    Properties:
-      PrimaryKey:
-        Name: id
-        Type: String
-      ProvisionedThroughput:
-        ReadCapacityUnits: 2
-        WriteCapacityUnits: 2
   TitleTable:
     Type: AWS::Serverless::SimpleTable
     Properties:

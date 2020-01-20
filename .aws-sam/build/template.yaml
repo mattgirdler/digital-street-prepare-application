@@ -75,15 +75,21 @@ Resources:
           Properties:
             Path: /
             Method: POST
-  SampleTable:
-    Type: AWS::Serverless::SimpleTable
+  calculateAssurancesFunction:
+    Type: AWS::Serverless::Function
     Properties:
-      PrimaryKey:
-        Name: id
-        Type: String
-      ProvisionedThroughput:
-        ReadCapacityUnits: 2
-        WriteCapacityUnits: 2
+      CodeUri: calculateAssurancesFunction
+      Handler: src/handlers/calculate-assurances.calculateAssurancesHandler
+      Runtime: nodejs10.x
+      MemorySize: 128
+      Timeout: 60
+      Description: Calculate and return the assurances required for a title.
+    Events:
+      Api:
+        Type: Api
+        Properties:
+          Path: /assurances
+          Method: GET
   TitleTable:
     Type: AWS::Serverless::SimpleTable
     Properties:
