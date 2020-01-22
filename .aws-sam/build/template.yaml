@@ -100,3 +100,13 @@ Resources:
         ReadCapacityUnits: 2
         WriteCapacityUnits: 2
       TableName: title
+  FormTable:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      PrimaryKey:
+        Name: form_type
+        Type: String
+      ProvisionedThroughput:
+        ReadCapacityUnits: 2
+        WriteCapacityUnits: 2
+      TableName: form

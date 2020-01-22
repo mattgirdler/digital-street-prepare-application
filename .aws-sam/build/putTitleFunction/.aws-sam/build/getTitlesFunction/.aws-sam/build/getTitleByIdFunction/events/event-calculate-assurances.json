@@ -1,6 +1,6 @@
 {
     "applicants": [{
-        "application_type": "Private individual",
+        "applicant_type": "Private individual",
         "name": "Sharon Jackson"
     }],
     "application_types": ["Transfer of Whole"],

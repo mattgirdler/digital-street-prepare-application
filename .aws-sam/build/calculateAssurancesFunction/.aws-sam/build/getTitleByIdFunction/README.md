@@ -28,6 +28,26 @@ aws configure
 
 Copy and paste the AWS Access Key ID and AWS Secret Access Key from the Access Keys section of the My Security Credentials page on the AWS Console.
 
+### Populating databases
+
+We use the batch-write-item operation provided by aws-cli to post multiple items to the tables. A single call to this operation can write up to 16 MB of data, which can comprise up to 25 put or delete requests. Because of this limitation, data is split into several JSON files.
+
+To populate the databases, run the following commands from the project's root directory:
+
+```bash
+cd data
+aws dynamodb batch-write-item --cli-input-json file://form-table1.json
+aws dynamodb batch-write-item --cli-input-json file://form-table2.json
+```
+
+If the operations are successful, you'll receive the following response:
+```
+{
+    "UnprocessedItems": {}
+}
+```
+
+This can also be verified by checking the tables in AWS console.
 
 ## Try the application out
 

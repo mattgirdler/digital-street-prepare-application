@@ -8,3 +8,5 @@ class Certificate {
         this.cert = cert
     } 
 }
+
+exports.Certificate = Certificate;

@@ -1,3 +1,4 @@
+const AssuranceFactory = require('../classes/Assurance')
 
 exports.calculateAssurancesHandler = async (event) => {
     const { applicants, application_types, title, path } = event;
@@ -6,13 +7,13 @@ exports.calculateAssurancesHandler = async (event) => {
     // https://docs.aws.amazon.com/lambda/latest/dg/nodejs-prog-model-logging.html
     console.log('received:', JSON.stringify(event));
 
-    for (applicant in applicants) {
-        console.log(applicants[applicant]['application_type'])
-        console.log(applicants[applicant]['name'])
+    for (applicationType in application_types) {
+        console.log(application_types[applicationType])
     }
-    for (application_type in application_types) {
-        console.log(application_types[application_type])
-    }
+
+    console.log("HELLO")
+
+    // const assurances = getAssurancesForEntries(title['title_number'], title['entries']);
 
     const response = {
         statusCode: 200,
@@ -22,3 +23,18 @@ exports.calculateAssurancesHandler = async (event) => {
     console.log(`response from: ${path} statusCode: ${response.statusCode} body: ${response.body}`);
     return response;
 };
+
+// function getAssurancesForEntries(titleNo, entries, applicants) {
+//     let assurances = []
+
+//     console.log('getAssurancesForEntries')
+
+//     for (entry in entries) {
+//         for (applicant in applicants) {
+//             let assurance = await AssuranceFactory.create(titleNo, entries[entry]['draft_entry_code'], applicants[applicant])
+//             assurances.push(assurance)
+//         }
+//     }
+
+//     return assurances
+// }

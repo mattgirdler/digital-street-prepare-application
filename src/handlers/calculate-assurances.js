@@ -1,4 +1,4 @@
-
+const AssuranceFactory = require('../classes/Assurance')
 
 exports.calculateAssurancesHandler = async (event) => {
     const { applicants, application_types, title, path } = event;
@@ -7,9 +7,13 @@ exports.calculateAssurancesHandler = async (event) => {
     // https://docs.aws.amazon.com/lambda/latest/dg/nodejs-prog-model-logging.html
     console.log('received:', JSON.stringify(event));
 
-    for (applicationType in applicationTypes) {
-        console.log(applicationTypes[applicationType])
+    for (applicationType in application_types) {
+        console.log(application_types[applicationType])
     }
+
+    const assurances = await getAssurancesForEntries(title['title_number'], title['entries']);
+    
+    console.log(assurances)
 
     const response = {
         statusCode: 200,
@@ -20,11 +24,17 @@ exports.calculateAssurancesHandler = async (event) => {
     return response;
 };
 
-const getHelpTextForEntries = (entries) => {
+async function getAssurancesForEntries(titleNo, entries, applicants) {
+    let assurances = []
+
+    console.log('getAssurancesForEntries')
+
     for (entry in entries) {
-
+        for (applicant in applicants) {
+            let assurance = await AssuranceFactory.create(titleNo, entries[entry]['draft_entry_code'], applicants[applicant])
+            assurances.push(assurance)
+        }
     }
+
+    return assurances
 }
-
-
-
