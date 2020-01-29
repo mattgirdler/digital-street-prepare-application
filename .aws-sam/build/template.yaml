@@ -9,6 +9,28 @@ Parameters:
   AppId:
     Type: String
 Resources:
+  createTopicFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: createTopicFunction
+      Handler: src/handlers/create-topic.createTopicHandler
+      Runtime: nodejs10.x
+      MemorySize: 128
+      Timeout: 60
+      Description: A simple example includes a HTTP get method to get one item from
+        a DynamoDB table.
+      Policies:
+      - DynamoDBCrudPolicy:
+          TableName: title
+      Environment:
+        Variables:
+          TITLE_TABLE: title
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /topic/{title_number}
+            Method: POST
   getTitleByIdFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -75,21 +97,21 @@ Resources:
           Properties:
             Path: /
             Method: POST
-  calculateAssurancesFunction:
+  calculateResolutionsFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: calculateAssurancesFunction
-      Handler: src/handlers/calculate-assurances.calculateAssurancesHandler
+      CodeUri: calculateResolutionsFunction
+      Handler: src/handlers/calculate-resolutions.calculateResolutionsHandler
       Runtime: nodejs10.x
       MemorySize: 128
       Timeout: 60
-      Description: Calculate and return the assurances required for a title.
+      Description: Calculate and return the resolutions required for a title's entries.
     Events:
       Api:
         Type: Api
         Properties:
-          Path: /assurances
-          Method: GET
+          Path: /resolutions
+          Method: POST
   TitleTable:
     Type: AWS::Serverless::SimpleTable
     Properties:
@@ -100,13 +122,3 @@ Resources:
         ReadCapacityUnits: 2
         WriteCapacityUnits: 2
       TableName: title
-  FormTable:
-    Type: AWS::Serverless::SimpleTable
-    Properties:
-      PrimaryKey:
-        Name: form_type
-        Type: String
-      ProvisionedThroughput:
-        ReadCapacityUnits: 2
-        WriteCapacityUnits: 2
-      TableName: form

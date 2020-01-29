@@ -1,0 +1,116 @@
+{
+    "applicants": [{
+        "applicant_type": "private individual",
+        "name": "JAMES BOND"
+    }, {
+        "applicant_type": "private individual",
+        "name": "SUSAN BOND"
+    }],
+    "application_types": ["Transfer of Whole"],
+    "title": {
+        "caution": false,
+        "title_number": "BGL107",
+        "tenure": "freehold",
+        "class_of_title": "absolute",
+        "status": {
+            "value": "open",
+            "date": null
+        },
+        "edition_date": "2004-01-15",
+        "application_reference": "KE0006B",
+        "application_timestamp": "2004-01-15T10:46:03Z",
+        "estate_interest": "estate in land",
+        "continuation_title_number": null,
+        "previous_title_number": null,
+        "commonhold_type": null,
+        "proprietors": [{
+            "type": "private individual",
+            "name": "JAMES BOND"
+        }, {
+            "type": "private individual",
+            "name": "SUSAN BOND"
+        }],
+        "entries": [
+            {
+                "sub_register_code": "A",
+                "sub_register_sequence": 1,
+                "schedule": null,
+                "entry_sequence": 1,
+                "role_code": "RDES",
+                "entry_date": "2004-01-15",
+                "language_code": "eng",
+                "draft_entry_version": null,
+                "draft_entry_code": null,
+                "entry_id": "2004-01-15-10.48.23.819630",
+                "entry_text": "<CENTRE>KENSINGTON AND CHELSEA</CENTRE>\r\rThe Freehold land shown edged with red on the plan of the above title filed at the Registry and being 5 Kings Road, London."
+            },
+            {
+                "sub_register_code": "A",
+                "sub_register_sequence": 2,
+                "schedule": null,
+                "entry_sequence": 2,
+                "role_code": "DMMR",
+                "entry_date": "2004-01-15",
+                "language_code": "eng",
+                "draft_entry_version": null,
+                "draft_entry_code": null,
+                "entry_id": "2004-01-15-11.07.20.126460",
+                "entry_text": "There are excluded from the registration of the land edged and numbered 1 in red on the filed plan the mines and minerals and ancilliary rights excepted and reserved by a Conveyance thereof dated 26 September 1925 made between (1) Redstock Mining Company Limited (2) Redstock Extraction Limited and (3) Landacre Limited.\r\rNOTE:- Abstract of Conveyance filed under BK10976."
+            },
+            {
+                "sub_register_code": "B",
+                "sub_register_sequence": 1,
+                "schedule": null,
+                "entry_sequence": 3,
+                "role_code": "RPRO",
+                "entry_date": "2004-01-15",
+                "language_code": "eng",
+                "draft_entry_version": null,
+                "draft_entry_code": null,
+                "entry_id": "2004-01-15-10.52.53.398710",
+                "entry_text": "PROPRIETOR: JAMES BOND and SUSAN BOND of 5 Kings Road, London."
+            },
+            {
+                "sub_register_code": "B",
+                "sub_register_sequence": 2,
+                "schedule": null,
+                "entry_sequence": 4,
+                "role_code": "RPPD",
+                "entry_date": "2004-01-15",
+                "language_code": "eng",
+                "draft_entry_version": 1,
+                "draft_entry_code": "BK688",
+                "entry_id": "2004-01-15-10.47.46.212770",
+                "entry_text": "The price stated to have been paid on 2 January 2004 was £95,000."
+            },
+            {
+                "sub_register_code": "B",
+                "sub_register_sequence": 3,
+                "schedule": null,
+                "entry_sequence": 5,
+                "role_code": "OJPR",
+                "entry_date": "2004-01-15",
+                "language_code": "eng",
+                "draft_entry_version": 1,
+                "draft_entry_code": "BX900",
+                "entry_id": "2004-01-15-10.52.54.124000",
+                "entry_text": "RESTRICTION: No disposition by a sole proprietor of the registered estate (except a trust corporation) under which capital money arises is to be registered unless authorised by an order of the court."
+            },
+            {
+                "sub_register_code": "C",
+                "sub_register_sequence": 1,
+                "schedule": null,
+                "entry_sequence": 6,
+                "role_code": "DCOV",
+                "entry_date": "2004-01-15",
+                "language_code": "eng",
+                "draft_entry_version": 2,
+                "draft_entry_code": "CR724",
+                "entry_id": "2004-01-15-10.55.44.601850",
+                "entry_text": "A Conveyance of the land in this title dated 21 April 1964 made between (1) June Whitfield and (2) Terry Scott contains restrictive covenants.\r\r¬NOTE: Copy filed."
+            }
+        ],
+        "timeshare_lease_issued": false,
+        "data_issues": []
+    }
+}

@@ -1,0 +1,646 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Prepare Application API",
+    "version": "0.0.1",
+    "description": "API providing title information to prepare an application to change the register.\n\nNOTE: this API definition assumes that **the user is a conveyancer** acting on behalf of an applicant to change the register\n"
+  },
+  "paths": {
+    "/Assurances": {
+      "post": {
+        "description": "Create a new application.",
+        "requestBody": {
+          "description": "Application to prepare.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AssurancesRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "An active application.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssurancesResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/applications/{application_id}": {
+      "get": {
+        "description": "Returns an application with the specified Application ID.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ApplicationId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "An active application.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssurancesResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Address": {
+        "required": [
+          "property_name_number",
+          "postcode"
+        ],
+        "properties": {
+          "property_name_number": {
+            "type": "string",
+            "example": "2"
+          },
+          "street_name": {
+            "type": "string",
+            "example": "William Prance Road"
+          },
+          "town_city": {
+            "type": "string",
+            "example": "Plymouth"
+          },
+          "county": {
+            "type": "string",
+            "example": "Devon"
+          },
+          "country": {
+            "type": "string",
+            "enum": [
+              "England",
+              "Wales"
+            ]
+          },
+          "postcode": {
+            "type": "string",
+            "example": "PL6 5WS",
+            "pattern": "([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9][A-Za-z]?))))\\s?[0-9][A-Za-z]{2})"
+          }
+        }
+      },
+      "Applicant": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ApplicantType"
+          },
+          {
+            "type": "object",
+            "required": [
+              "name"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "The full name of the individual, registered company or trustee of a charity."
+              },
+              "company_number": {
+                "type": "string",
+                "description": "The applicant's Companies House registration number, if they are a registered company.",
+                "format": "\\d{8}"
+              }
+            }
+          }
+        ]
+      },
+      "ApplicantType": {
+        "type": "object",
+        "required": [
+          "applicant_type"
+        ],
+        "properties": {
+          "applicant_type": {
+            "type": "string",
+            "description": "The type of applicant.",
+            "enum": [
+              "Private individual",
+              "Registered Company",
+              "Overseas Registered Company",
+              "Trustee of Charity"
+            ]
+          }
+        }
+      },
+      "ApplicationId": {
+        "type": "object",
+        "required": [
+          "application_id"
+        ],
+        "properties": {
+          "application_id": {
+            "type": "integer",
+            "description": "The unique ID of an application.",
+            "example": 1
+          }
+        }
+      },
+      "AssurancesResponse": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/AssurancesRequest"
+          },
+          {
+            "$ref": "#/components/schemas/ApplicationId"
+          },
+          {
+            "$ref": "#/components/schemas/TitleRegister"
+          },
+          {
+            "properties": {
+              "assurances": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Assurance"
+                }
+              },
+              "topic_uri": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "required": [
+              "topic_uri"
+            ]
+          }
+        ]
+      },
+      "AssurancesRequest": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ApplicationType"
+          }
+        ],
+        "required": [
+          "title_number",
+          "confirmation_of_identity"
+        ],
+        "properties": {
+          "applicant": {
+            "$ref": "#/components/schemas/Applicant"
+          },
+          "confirmation_of_identity": {
+            "$ref": "#/components/schemas/ConfirmationOfIdentity"
+          },
+          "disclosable_overriding_interests": {
+            "type": "boolean",
+            "description": "This application relates to a registrable disposition and disclosable overriding interests affect the registered estate."
+          },
+          "title_number": {
+            "type": "string",
+            "example": "ABC123",
+            "description": "The title number that the application affects.",
+            "pattern": "^([A-Z]{0,3}[1-9][0-9]{0,5}|[0-9]{1,6}[ZT])$"
+          }
+        }
+      },
+      "ApplicationType": {
+        "type": "object",
+        "properties": {
+          "application_type": {
+            "type": "string",
+            "description": "The type of application being created.",
+            "enum": [
+              "Transfer of Whole",
+              "Transfer of Part"
+            ]
+          }
+        }
+      },
+      "ConfirmationOfIdentity": {
+        "type": "array",
+        "description": "Question if this could be omitted via agreeing to Terms of Use. If you are sending an application to register a transfer, lease or charge, for each party to each disposition that is to be registered, provide the details of the conveyancer who represented them.",
+        "items": {
+          "type": "object",
+          "required": [
+            "party_name"
+          ],
+          "properties": {
+            "party_name": {
+              "type": "string",
+              "description": "The name of the transferror, landlord, transferee, tenant, borrower or lender."
+            },
+            "conveyancer": {
+              "description": "The conveyancer representing the named party.",
+              "$ref": "#/components/schemas/Conveyancer"
+            }
+          }
+        }
+      },
+      "Conveyancer": {
+        "type": "object",
+        "required": [
+          "name",
+          "address",
+          "reference"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Conveyancer's name",
+            "example": "Conveyancing LTD"
+          },
+          "address": {
+            "description": "Conveyancer's address",
+            "$ref": "#/components/schemas/Address"
+          },
+          "reference": {
+            "type": "string",
+            "example": "123456",
+            "description": "Conveyancer's case reference"
+          }
+        }
+      },
+      "Assurance": {
+        "type": "object",
+        "required": [
+          "role_code",
+          "form_code",
+          "Assurances"
+        ],
+        "properties": {
+          "role_code": {
+            "$ref": "#/components/schemas/RoleCode"
+          },
+          "description": {
+            "type": "string"
+          },
+          "Assurances": {
+            "description": "Advice on how to resolve the issue.",
+            "type": "object",
+            "required": [
+              "evidence_types",
+              "Assurances_details"
+            ],
+            "properties": {
+              "evidence_types": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "Consent",
+                    "Certificate",
+                    "Court Order",
+                    "Statement of Truth",
+                    "Statutory Declaration"
+                  ]
+                }
+              },
+              "Assurances_details": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "ClassOfTitle": {
+        "type": "string",
+        "description": "The *class of title* is a measure of confidence that HM Land Registry has in guaranteeing the proprietor(s) of the\ntitle against a legal challenge to that title.\n\n\n---\n\nA property of this type may be any of the following values:\n- `absolute`: A *title absolute* is conferred to the proprietor(s) if it is determined that the claim to proprietorship is\n  indisputable.\n  When a title is first registered, it is required to provide a complete history of ownership for the 15 years prior\n  to registration.\n  In the case of a leasehold title, it is also required to prove that the landlord has the rights to grant a lease -\n  either through demonstrating 15 years of ownership history, or through an official copy of the register if the\n  freehold is already registered.\n  Most titles are considered to be titles absolute.\n\n- `good`: A *good leasehold* title is conferred to the proprietor(s) if the claim to the leasehold title is satisfactory,\n  but the landlord's claim to the freehold title cannot be verified.\n  In such a situation, it is unknown whether the claimed landlord has the power to grant such a lease, or whether\n  any covenants or restrictions affect the property.\n\n- `qualified`: A *qualified title* is conferred to the proprietor(s) if the claim to proprietorship is incomplete.\n  Such a class of title would be granted if, when first registered, did not fully account for the 15 years prior to\n  registration.\n  A qualified title is susceptible to being challenged by a person with a stronger claim to the title.\n\n- `possessory`: A *possessory title* is conferred to the proprietor(s) when proprietorship is claimed by right of adverse\n  possession or when no documentation can be provided asserting the title.",
+        "example": "absolute",
+        "enum": [
+          "absolute",
+          "good",
+          "qualified",
+          "possessory"
+        ]
+      },
+      "ErrorResponse": {
+        "required": [
+          "error_code",
+          "error_message",
+          "reference",
+          "status"
+        ],
+        "type": "object",
+        "properties": {
+          "reference": {
+            "type": "string",
+            "description": "The unique reference for the error.\nQuote this reference when seeking technical support from the Digital Register team.\n",
+            "format": "uuid"
+          },
+          "status": {
+            "maximum": 599,
+            "minimum": 400,
+            "type": "integer",
+            "description": "The HTTP status code returned by the server with this response.",
+            "format": "int32"
+          },
+          "error_code": {
+            "type": "string",
+            "description": "An error code in the form <code>LRAPI<var>xxxxx</var></code> that identifies the cause of the error."
+          },
+          "error_message": {
+            "type": "string",
+            "description": "A human-readable message that provides a summary of the cause of the error."
+          }
+        },
+        "description": "Returned when an error occurs while trying to serve a request.\nIt provides an error code for diagnostic purposes as well as a human-readable message.\n"
+      },
+      "EstateInterest": {
+        "type": "string",
+        "description": "Describes the type of *legal interest* (the collection of rights) of an *estate* (the land to which these rights\napply).\n\n\n---\n\nA property of this type may be any of the following values:\n- `estate in land`: An *estate in land* refers to ownership or possessory rights to land or property.\n\n  A freehold title or a leasehold title would be an example of an estate in land.\n\n- `affecting franchise`: A *franchise* is a right granted by the Crown through a charter or letters patent, such as the right to host a\n  market or a fair.\n  A title to franchise does not grant any ownership to the land in question; it is distinct from freehold or\n  leasehold titles.\n\n  A franchise is an *affecting franchise* if it is registered to a defined extent of land and is capable of\n  affecting the title to an estate.\n  Otherwise, the franchise is a *relating franchise*.\n\n- `relating franchise`: A *franchise* is a right granted by the Crown through a charter or letters patent, such as the right to host a\n  market or a fair.\n  A title to franchise does not grant any ownership to the land in question; it is distinct from freehold or\n  leasehold titles.\n\n  A franchise is an *affecting franchise* if it is registered to a defined extent of land and is capable of\n  affecting the title to an estate.\n  Otherwise, the franchise is a *relating franchise*.\n\n- `manor`: A *manor* was, historically, central to feudalism - either the Crown or a superior lord would grant ownership and\n  other rights in exchange for their allegiance and service.\n\n  From a modern perspective, there are three main elements:\n  - The *lordship*, the owner of which is entitled to refer to themself as the lord of that manor\n  - The *manorial*, which refers to the land and the manor house upon it\n  - The *seignory*, which refers to additional rights on the land which have been reserved by the lord, such as\n    hunting or fishing rights\n\n- `profit à prendre in gross`: A *profit à prendre in gross* is the right to take a natural resource from another person's land.\n  The owner of the profit may exercise that right irrespective of the ownership of the land in question.\n  The profit also effectively grants an easement on the land due to the necessity of physically accessing the\n  resource in order to take it.\n\n- `rentcharge`: A *rentcharge* is a regular payment made between the owner of a freehold title and another person who otherwise\n  has no additional interest in the land.\n  This distinguishes a rentcharge from ground rent (which is only applicable to leasehold titles) or from a charge\n  (which is the use of a title as collateral in order to protect a lender in the event that a borrower defaults on\n  their repayments).\n\n  A rentcharge is *terminable* if it is only applicable for a fixed term; otherwise, it is *perpetual*.\n\n- `perpetual rentcharge`: A *rentcharge* is a regular payment made between the owner of a freehold title and another person who otherwise\n  has no additional interest in the land.\n  This distinguishes a rentcharge from ground rent (which is only applicable to leasehold titles) or from a charge\n  (which is the use of a title as collateral in order to protect a lender in the event that a borrower defaults on\n  their repayments).\n\n  A rentcharge is *terminable* if it is only applicable for a fixed term; otherwise, it is *perpetual*.\n\n- `terminable rentcharge`: A *rentcharge* is a regular payment made between the owner of a freehold title and another person who otherwise\n  has no additional interest in the land.\n  This distinguishes a rentcharge from ground rent (which is only applicable to leasehold titles) or from a charge\n  (which is the use of a title as collateral in order to protect a lender in the event that a borrower defaults on\n  their repayments).\n\n  A rentcharge is *terminable* if it is only applicable for a fixed term; otherwise, it is *perpetual*.",
+        "example": "estate in land",
+        "enum": [
+          "estate in land",
+          "affecting franchise",
+          "relating franchise",
+          "manor",
+          "profit à prendre in gross",
+          "rentcharge",
+          "perpetual rentcharge",
+          "terminable rentcharge"
+        ]
+      },
+      "Language": {
+        "type": "string",
+        "description": "A three-character code representing a language according to the\n[ISO 639-3 standard](https://iso639-3.sil.org/code_tables/639/data).\n",
+        "example": "eng",
+        "enum": [
+          "eng",
+          "cym"
+        ]
+      },
+      "RegisterEntry": {
+        "required": [
+          "entry_date",
+          "entry_id",
+          "language_code",
+          "register_sequence"
+        ],
+        "type": "object",
+        "properties": {
+          "sub_register_code": {
+            "$ref": "#/components/schemas/SubRegister"
+          },
+          "sub_register_sequence": {
+            "minimum": 1,
+            "type": "integer",
+            "description": "The position of the entry within its sub register (or schedule, if specified).",
+            "format": "int32",
+            "example": 1
+          },
+          "schedule": {
+            "$ref": "#/components/schemas/ScheduleInfo"
+          },
+          "entry_sequence": {
+            "minimum": 1,
+            "type": "integer",
+            "description": "The position of the entry within the entire register.",
+            "format": "int32",
+            "example": 1
+          },
+          "entry_date": {
+            "type": "string",
+            "description": "The date on which the entry was added to the register.",
+            "format": "date"
+          },
+          "language_code": {
+            "$ref": "#/components/schemas/Language"
+          },
+          "draft_entry_version": {
+            "minimum": 1,
+            "type": "integer",
+            "description": "The version number of the entry template used to create this entry.",
+            "format": "int32",
+            "example": 1
+          },
+          "draft_entry_code": {
+            "maxLength": 5,
+            "minLength": 5,
+            "pattern": "^[A-Z]{2,5}[0-9]*$",
+            "type": "string",
+            "description": "Identifies the *computerised register entry* (CRE) or *computerised search entry* (CSE) that this entry has used\nas an entry template.\n",
+            "example": "BX900"
+          },
+          "role_code": {
+            "$ref": "#/components/schemas/RoleCode"
+          },
+          "entry_id": {
+            "type": "string",
+            "description": "The timestamp representing the date and time that this entry was created.\nThis field also serves as the unique identifier for this entry.\n",
+            "format": "date-time"
+          },
+          "priority_timestamp": {
+            "type": "string",
+            "description": "The timestamp representing the date and time that the associated application was entered onto the daylist.\n",
+            "format": "date-time"
+          },
+          "entry_text": {
+            "type": "string",
+            "description": "Full entry text as shown on the register.",
+            "example": "No disposition by a sole proprietor of the registered estate (except a trust corporation) under which capital money arises is to be registered unless authorised by an order of the court.",
+            "x-data-quality": [
+              {
+                "tag": "data_quality_no_entry_text",
+                "message": "The entry text is currently unavailable."
+              }
+            ]
+          }
+        },
+        "description": "Represents an entry on the register for a title.\n"
+      },
+      "RoleCode": {
+        "maxLength": 4,
+        "minLength": 4,
+        "pattern": "^[A-Z]{4}$",
+        "type": "string",
+        "description": "A four-character code that identifies the role that an entry fulfills within the register.",
+        "example": "OJPR"
+      },
+      "ScheduleCode": {
+        "type": "string",
+        "description": "A single-character code that identifies the schedule.\nA schedule is an entry in the register that conforms to a particular structure.\n\nThe schedule code may be any of the following values:\n- `D`: the entry is part of the schedule of deeds imposing restrictive covenants\n- `F`: the entry is part of the schedule of leases of easements\n- `H`: the entry is part of the schedule of a single registered lease\n- `L`: the entry is part of the schedule of notices of lease\n- `M`: the entry is part of the schedule of registered leases\n- `P`: the entry is part of the schedule of properties\n- `Q`: the entry is part of the schedule of a single registered lease, charged by a registered rentcharge\n- `R`: the entry is part of the schedule of registered rentcharges\n- `S`: the entry is part of the schedule of restrictive covenants\n- `T`: the entry is part of the schedule of apportioned rent\n- `W`: the entry is part of the schedule of rentcharges\n- `X`: the entry is part of the schedule of personal covenants\n- `Y`: the entry is part of the schedule of apportionments and exonerating rentcharges\n- `Z`: the entry is part of the schedule of rentcharges created on transfer of part\n",
+        "example": "L",
+        "enum": [
+          "D",
+          "F",
+          "H",
+          "L",
+          "M",
+          "P",
+          "Q",
+          "R",
+          "S",
+          "T",
+          "W",
+          "X",
+          "Y",
+          "Z"
+        ]
+      },
+      "ScheduleInfo": {
+        "required": [
+          "code",
+          "header",
+          "sequence"
+        ],
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/components/schemas/ScheduleCode"
+          },
+          "sequence": {
+            "minimum": 1,
+            "type": "integer",
+            "description": "The position of the entry within its schedule.",
+            "format": "int32",
+            "example": 1
+          },
+          "header": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "The official header text of this schedule.",
+            "example": {
+              "eng": "Schedule of rentcharges",
+              "cym": "Atodlen rhent-daliadau cofrestredig"
+            }
+          }
+        },
+        "description": "Encapsulates information about a schedule entry.\n"
+      },
+      "SubRegister": {
+        "type": "string",
+        "description": "A single-character code that identifies in which part of the register an entry resides.\n\nThe subregister code may be any of the following values:\n- `A`: the entry is part of the property register\n- `B`: the entry is part of the proprietorship register\n- `C`: the entry is part of the charges register\n",
+        "example": "A",
+        "enum": [
+          "A",
+          "B",
+          "C"
+        ]
+      },
+      "Tenure": {
+        "type": "string",
+        "description": "The tenure of a title determines the rights of that title's proprietor(s).\n\nCurrently, the law in England and Wales permits two kinds of interest: *freehold* and *leasehold*.\n\n\n---\n\nA property of this type may be any of the following values:\n- `freehold`: Indicates that this is a freehold title; i.e. that full, perpetual, ownership rights of the specified property and\n  land are granted to the proprietor(s).\n\n- `leasehold`: Indicates that this is a leasehold title; i.e. that possessory rights of the property (but not the land) have been\n  granted to the proprietor(s) for the duration of the lease agreement with the freeholder(s).",
+        "example": "freehold",
+        "enum": [
+          "freehold",
+          "leasehold"
+        ]
+      },
+      "Title": {
+        "required": [
+          "application_reference",
+          "entries",
+          "status",
+          "title_number"
+        ],
+        "type": "object",
+        "properties": {
+          "title_number": {
+            "maxLength": 9,
+            "type": "string",
+            "description": "The unique reference number that refers to this title.",
+            "example": "AGL123456"
+          },
+          "tenure": {
+            "$ref": "#/components/schemas/Tenure"
+          },
+          "class_of_title": {
+            "$ref": "#/components/schemas/ClassOfTitle"
+          },
+          "status": {
+            "$ref": "#/components/schemas/TitleStatusInfo"
+          },
+          "edition_date": {
+            "type": "string",
+            "description": "The date on which the current version of the register was published.\n",
+            "format": "date"
+          },
+          "application_reference": {
+            "type": "string",
+            "description": "The Application Barcode Reference (ABR) of the latest application to make a substantive change to the register\nfor this title.\n",
+            "example": "BADD31A"
+          },
+          "application_timestamp": {
+            "type": "string",
+            "description": "The date and time that the latest application to make a substantive change to the register for this title was\nsubmitted.\n",
+            "format": "date-time"
+          },
+          "estate_interest": {
+            "$ref": "#/components/schemas/EstateInterest"
+          },
+          "entries": {
+            "type": "array",
+            "description": "The list of current entries on the register for this title.",
+            "items": {
+              "$ref": "#/components/schemas/RegisterEntry"
+            },
+            "x-data-quality": [
+              {
+                "tag": "data_quality_schedule_code_invalid",
+                "message": "Ordering of entries failed due to an invalid schedule code."
+              }
+            ]
+          }
+        },
+        "description": "Represents a title for land or property.\n"
+      },
+      "TitleRegister": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Title"
+          }
+        ],
+        "x-wrapped-type": "Title"
+      },
+      "TitleStatus": {
+        "type": "string",
+        "description": "The status of a title represents whether or not it has been superseded.\nAn open title is one which is still in effect, whereas a closed title is no longer legally binding.\n",
+        "example": "open",
+        "enum": [
+          "open",
+          "closed"
+        ]
+      },
+      "TitleStatusInfo": {
+        "required": [
+          "value"
+        ],
+        "type": "object",
+        "properties": {
+          "value": {
+            "$ref": "#/components/schemas/TitleStatus"
+          },
+          "date": {
+            "type": "string",
+            "description": "The date that the status of the title was changed.\n",
+            "format": "date"
+          }
+        },
+        "description": "Encapsulates information related to the status of the title.\n"
+      }
+    },
+    "parameters": {
+      "ApplicationId": {
+        "name": "application_id",
+        "in": "path",
+        "required": true,
+        "description": "The unique ID of an application.",
+        "schema": {
+          "type": "integer",
+          "example": 1
+        }
+      }
+    }
+  }
+}
