@@ -5,4 +5,4 @@ class Evidence {
     }
 }
 
-exports.Evidence = Evidence
+module.exports = Evidence

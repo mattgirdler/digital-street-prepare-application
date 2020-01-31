@@ -1,4 +1,4 @@
-require('../Entry')
+const Entry = require('../Entry')
 
 class CBCR extends Entry { 
     constructor() {
@@ -6,4 +6,4 @@ class CBCR extends Entry {
     }
 }
 
-exports.CBCR = CBCR
+module.exports = CBCR

@@ -56,7 +56,6 @@ Resources:
             Path: /topic/{title_number}
             Method: POST
 
-
   getTitleByIdFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -140,12 +139,12 @@ Resources:
       MemorySize: 128
       Timeout: 60
       Description: Calculate and return the resolutions required for a title's entries.
-    Events:
-      Api:
-        Type: Api
-        Properties:
-          Path: /resolutions
-          Method: POST
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /resolutions
+            Method: POST
 
 
   # Simple syntax to create a DynamoDB table with a single attribute primary key, more in

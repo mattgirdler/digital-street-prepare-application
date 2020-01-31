@@ -287,23 +287,19 @@
             "description": "Advice on how to resolve the issue.",
             "type": "object",
             "required": [
-              "evidence_types",
+              "assurance_type",
               "Assurances_details"
             ],
             "properties": {
-              "evidence_types": {
-                "type": "array",
-                "items": {
-                  "type": "string",
-                  "enum": [
-                    "Consent",
-                    "Certificate",
-                    "Court Order",
-                    "Statement of Truth",
-                    "Statutory Declaration"
-                  ]
-                }
-              },
+              "assurance_type": {
+                "type": "string",
+                "enum": [
+                "Consent",
+                "Certificate",
+                "Court Order",
+                "Statement of Truth",
+                "Statutory Declaration"
+                
               "Assurances_details": {
                 "type": "string"
               }

@@ -1,4 +1,4 @@
-require('./Evidence')
+const Evidence = require('./Evidence')
 
 class CourtOrder extends Evidence {
     constructor(evidence = null) {
@@ -15,4 +15,4 @@ CourtOrder.prototype.toString = function() {
     })
 }
 
-exports.CourtOrder = CourtOrder;
+module.exports = CourtOrder;

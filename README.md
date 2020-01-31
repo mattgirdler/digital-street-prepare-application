@@ -38,6 +38,7 @@ To populate the databases, run the following commands from the project's root di
 cd data
 aws dynamodb batch-write-item --cli-input-json file://form-table1.json
 aws dynamodb batch-write-item --cli-input-json file://form-table2.json
+
 ```
 
 If the operations are successful, you'll receive the following response:
@@ -151,7 +152,7 @@ Commit and push the change. When the deployment completes, view the function in 
 
 ## Build and test locally
 
-The AWS SAM command line interface (CLI) is an extension of the AWS CLI that adds functionality for building and testing Lambda applications. It uses Docker to run your functions in an Amazon Linux qironment that matches Lambda. It can also emulate your application's build environment and API.
+The AWS SAM command line interface (CLI) is an extension of the AWS CLI that adds functionality for building and testing Lambda applications. It uses Docker to run your functions in an Amazon Linux environment that matches Lambda. It can also emulate your application's build environment and API.
 
 If you prefer to use an integrated development environment (IDE) to build and test your application, you can use the AWS Toolkit.
 The AWS Toolkit is an open-source plugin for popular IDEs that uses the AWS SAM CLI to build and deploy serverless applications on AWS. The AWS Toolkit also adds step-through debugging for Lambda function code.
