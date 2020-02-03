@@ -1,4 +1,4 @@
-const ResolutionsSchema = require('../classes/ResolutionsSchema')
+const ResolutionsResponse = require('../classes/ResolutionsResponse')
 
 exports.calculateResolutionsHandler = async (event) => {
     const { body, path } = event;
@@ -11,7 +11,7 @@ exports.calculateResolutionsHandler = async (event) => {
 
     console.log('received:', JSON.stringify(event));
 
-    const resolutionsSchema = new ResolutionsSchema(applicants, application_types, title['entries'], title['proprietors']);
+    const resolutionsSchema = new ResolutionsResponse(applicants, application_types, title['proprietors'], title['entries']);
     
     console.log(resolutionsSchema)
 
